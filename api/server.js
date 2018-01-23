@@ -13,3 +13,8 @@ let  port = 8080;
 app.listen(port);
 
 console.log('O servidor esta escutando a porta ' + port);
+
+//testando o GET dando um Ola para o Postman
+app.get('/', (req, res) => {
+    res.send({msg: 'ola'});
+});
