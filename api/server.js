@@ -37,9 +37,24 @@ app.post('/api', (req, res) => {
                     res.json(result);
                 }
                 mongoClient.close();
+            });
+        });
+    });
+  
+    
+});
+
+app.get('/api', (req, res) => {
+    db.open((err, mongoClient) => {
+        mongoClient.collection('postagens', (err, collection) => {
+            collection.find().toArray((err, result) => {
+                if(err) {
+                    res.json(err);
+                } else {
+                    res.json(result);
+                }
+                mongoClient.close();
             })
         })
     })
-  
-    
 })
