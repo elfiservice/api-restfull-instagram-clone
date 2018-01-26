@@ -51,8 +51,11 @@ app.get('/api', (req, res) => {
             collection.find().toArray((err, result) => {
                 if(err) {
                     res.json(err);
+                } else if (result) {
+
+                    res.status(200).json(result);
                 } else {
-                    res.json(result);
+                    res.status(404).json(result);
                 }
                 mongoClient.close();
             });
@@ -66,8 +69,10 @@ app.get('/api/:id', (req, res) => {
             collection.find({_id : objectId(req.params.id)}).toArray((err, result) => {
                 if(err) {
                     res.json(err);
+                } else if (result != "") {
+                    res.status(200).json(result);
                 } else {
-                    res.json(result);
+                    res.status(404).json(result);
                 }
                 mongoClient.close();
             });
@@ -96,7 +101,7 @@ app.put('/api/:id', (req, res) => {
     });
 });
 
-//PUT - atualizar API
+//delete - remover do BD API
 app.delete('/api/:id', (req, res) => {
     db.open((err, mongoClient) => {
         mongoClient.collection('postagens', (err, collection) => {
