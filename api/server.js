@@ -95,3 +95,19 @@ app.put('/api/:id', (req, res) => {
         });
     });
 });
+
+//PUT - atualizar API
+app.delete('/api/:id', (req, res) => {
+    db.open((err, mongoClient) => {
+        mongoClient.collection('postagens', (err, collection) => {
+            collection.remove({ _id : objectId(req.params.id) }, (err, result) => {
+                if(err) {
+                    res.json(err);
+                } else {
+                    res.json(result);
+                }
+                mongoClient.close();
+            });
+        });
+    });
+});
