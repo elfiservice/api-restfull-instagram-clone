@@ -29,6 +29,11 @@ app.get('/', (req, res) => {
 
 app.post('/api', (req, res) => {
     let dados = req.body;
+    //seta o RestFul para responder o APP de Origem a quando este for solicitado. recebendo uma resposta no front
+    //parametro 1: é o erro q da no Front ao tentar enviar uma solicitação para esta API
+    //parametro 2: é o dominioo de destino da resposta, poe um * para dizer q qualquer dominio solicitante pode recevber essa resposta da API
+    res.setHeader("Access-Control-Allow-Origin", "*");
+        
     db.open((err, mongoClient) => {
         mongoClient.collection('postagens', (err, collection) => {
             collection.insert(dados, (err, result) => {
