@@ -34,6 +34,11 @@
 
 					var arquivo = document.getElementById('arquivo').files[0];
 					var titulo = document.getElementById('titulo').value;
+
+					formData.append("arquivo", arquivo);
+					formData.append("titulo", titulo);
+
+					
 					//criar xmlhttprequest
 					var xhr = new XMLHttpRequest();
 					//verificar as mudanças de estado

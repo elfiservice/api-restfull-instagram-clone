@@ -1,5 +1,6 @@
 let express = require('express'),
     bodyParser = require('body-parser'),
+    multiparty = require('connect-multiparty'),
     mongodb = require('mongodb'),
     objectId = require('mongodb').ObjectID;
 
@@ -8,6 +9,7 @@ let app = express();
 //midleware Body-parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(multiparty());
 
 let  port = 3030;
 
@@ -28,24 +30,27 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api', (req, res) => {
-    let dados = req.body;
+    
     //seta o RestFul para responder o APP de Origem a quando este for solicitado. recebendo uma resposta no front
     //parametro 1: é o erro q da no Front ao tentar enviar uma solicitação para esta API
     //parametro 2: é o dominioo de destino da resposta, poe um * para dizer q qualquer dominio solicitante pode recevber essa resposta da API
     res.setHeader("Access-Control-Allow-Origin", "*");
+    let dados = req.body;
+
+    res.send(dados);
         
-    db.open((err, mongoClient) => {
-        mongoClient.collection('postagens', (err, collection) => {
-            collection.insert(dados, (err, result) => {
-                if(err){
-                    res.json(err)
-                }else{
-                    res.json(result);
-                }
-                mongoClient.close();
-            });
-        });
-    });
+    // db.open((err, mongoClient) => {
+    //     mongoClient.collection('postagens', (err, collection) => {
+    //         collection.insert(dados, (err, result) => {
+    //             if(err){
+    //                 res.json(err)
+    //             }else{
+    //                 res.json(result);
+    //             }
+    //             mongoClient.close();
+    //         });
+    //     });
+    // });
   
     
 });
