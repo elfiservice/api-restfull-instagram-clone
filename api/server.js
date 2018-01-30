@@ -2,7 +2,8 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     multiparty = require('connect-multiparty'),
     mongodb = require('mongodb'),
-    objectId = require('mongodb').ObjectID;
+    objectId = require('mongodb').ObjectID,
+    fs = require('fs'); //fs=file system nativo do NodeJs para trabalhar com Arquivos no lado servidor
 
 let app = express();
 
@@ -35,24 +36,41 @@ app.post('/api', (req, res) => {
     //parametro 1: é o erro q da no Front ao tentar enviar uma solicitação para esta API
     //parametro 2: é o dominioo de destino da resposta, poe um * para dizer q qualquer dominio solicitante pode recevber essa resposta da API
     res.setHeader("Access-Control-Allow-Origin", "*");
-    let dados = req.body;
 
-    res.send(dados);
-        
-    // db.open((err, mongoClient) => {
-    //     mongoClient.collection('postagens', (err, collection) => {
-    //         collection.insert(dados, (err, result) => {
-    //             if(err){
-    //                 res.json(err)
-    //             }else{
-    //                 res.json(result);
-    //             }
-    //             mongoClient.close();
-    //         });
-    //     });
-    // });
-  
-    
+    let date = new Date();
+    let timeStamp = date.getTime();
+
+    //com o modulo 'fs' o req.files retorna um json com os dados do Arquivo enviado do Front Client com o nome do Input do File
+    let nomeDaImg = timeStamp + '_' + req.files.arquivo.originalFilename;
+
+    let pathOrigem = req.files.arquivo.path;
+    let pathDestino = './uploads/' + nomeDaImg;
+    //metodo do modulo 'fs' para renomear o caminho do arquivo do temporario para o fixo no servidor
+    fs.rename(pathOrigem, pathDestino, (err) => {
+        if(err) {
+            res.status(500).json({error: err});
+            return;
+        }
+
+        let dados = {
+            titulo: req.body.titulo,
+            url_imagem: nomeDaImg
+        }
+
+        db.open((err, mongoClient) => {
+            mongoClient.collection('postagens', (err, collection) => {
+                collection.insert(dados, (err, result) => {
+                    if(err){
+                        res.json(err)
+                    }else{
+                        res.json(result);
+                    }
+                    mongoClient.close();
+                });
+            });
+        });
+
+    });    
 });
 
 app.get('/api', (req, res) => {
