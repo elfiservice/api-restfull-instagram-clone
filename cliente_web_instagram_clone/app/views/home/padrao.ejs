@@ -17,6 +17,35 @@
 		<script>
 			$(document).ready(function(){
 
+				//receber conteudo do BD e monsrtar na Tela
+				function carregarPostagens() {
+					let xhr = new XMLHttpRequest();
+
+					xhr.open("GET", "http://localhost:3030/api");
+
+					xhr.onload = function() {
+						if(xhr.status === 200) {
+							let resposta = $.parseJSON(xhr.responseText);
+							
+							for(let i = 0;i < resposta.length; i++) {
+								$("#container_timeline").append(
+									'<div class="publicacao">' +
+										'<span class="titulo">' +
+											resposta[i].titulo +
+										'</span>' +
+										'<img src="./uploads/' + resposta[i].url_imagem + '" >' +
+									'</div>'
+ 
+								);
+							}
+						}
+					}
+
+					xhr.send();
+				}
+
+				carregarPostagens();
+
 				$('#btn_incluir').click(function(){
 					$('#container_timeline').hide();
 					$('#container_form').show();
