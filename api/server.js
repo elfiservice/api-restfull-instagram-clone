@@ -94,6 +94,24 @@ app.get('/api', (req, res) => {
     });
 });
 
+//rota para pegar as Imagens no servidor a partir do URL do client
+app.get('/imagens/:imagem', (req, res) => {
+    let img = req.params.imagem;
+
+    fs.readFile('./uploads/' + img, (err, conteudo) => {
+        if(err) {
+            res.status(400).json(err);
+            return;
+        }
+
+        //escrever no cabeçalho o conten type do tipo image/jpg informando o navegador q é esse conteudo
+        res.writeHead(200, {'content-type' : 'image/jpg'});
+        //func nativa do NODE q escreve dentro do response --> .end
+        res.end(conteudo);
+    });
+
+});
+
 app.get('/api/:id', (req, res) => {
     db.open((err, mongoClient) => {
         mongoClient.collection('postagens', (err, collection) => {
