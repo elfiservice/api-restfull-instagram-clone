@@ -12,6 +12,22 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(multiparty());
 
+//middleware do controle de permissoes e headrs para o Navegador e transções
+app.use(function(req, res, next) {
+
+        //seta o RestFul para responder o APP de Origem a quando este for solicitado. recebendo uma resposta no front
+    //parametro 1: é o erro q da no Front ao tentar enviar uma solicitação para esta API
+    //parametro 2: é o dominioo de destino da resposta, poe um * para dizer q qualquer dominio solicitante pode recevber essa resposta da API
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    //devido o setRequestHeader() no cliente alterando o Headrer conten-tyoe para json
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader("Access-Control-Allow-Credentials", true);
+
+
+    next(); //da cobntinuidade ao processo do codigo
+});
+
 let  port = 3030;
 
 app.listen(port);
@@ -32,10 +48,7 @@ app.get('/', (req, res) => {
 
 app.post('/api', (req, res) => {
     
-    //seta o RestFul para responder o APP de Origem a quando este for solicitado. recebendo uma resposta no front
-    //parametro 1: é o erro q da no Front ao tentar enviar uma solicitação para esta API
-    //parametro 2: é o dominioo de destino da resposta, poe um * para dizer q qualquer dominio solicitante pode recevber essa resposta da API
-    res.setHeader("Access-Control-Allow-Origin", "*");
+
 
     let date = new Date();
     let timeStamp = date.getTime();
@@ -74,8 +87,6 @@ app.post('/api', (req, res) => {
 });
 
 app.get('/api', (req, res) => {
-
-    res.setHeader("Access-Control-Allow-Origin", "*");
 
     db.open((err, mongoClient) => {
         mongoClient.collection('postagens', (err, collection) => {
@@ -131,7 +142,7 @@ app.get('/api/:id', (req, res) => {
 
 //PUT - atualizar API
 app.put('/api/:id', (req, res) => {
-    res.send('para atualizar ');
+    res.send('para atualizar ' + req.params.id + ' e ' + req.body.comentario_client);
     // db.open((err, mongoClient) => {
     //     mongoClient.collection('postagens', (err, collection) => {
     //         collection.update(

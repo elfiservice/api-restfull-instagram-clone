@@ -49,8 +49,12 @@
 
 								let xhr = new XMLHttpRequest();
 								xhr.open("PUT", "http://localhost:3030/api/" + id);
-								xhr.send();
+								xhr.setRequestHeader("Content-Type", "application/json");
+								xhr.send(JSON.stringify({comentario_client: comentario}));
 
+								xhr.onload = function() {
+									alert(xhr.responseText);
+								}
 							
 							});
 						}
