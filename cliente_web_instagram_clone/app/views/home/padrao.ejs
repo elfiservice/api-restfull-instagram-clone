@@ -35,12 +35,20 @@
 										'</span>' +
 										'<img src="http://localhost:3030/imagens/' + resposta[i].url_imagem + '" >' +
 										'<div class="comentar">' +
-											'<input type="text" class="form-control input_comentario" placeholder="Deixe um comentario...">' +
-											'<button class="btn btn-default btn_postagem" type="button">Comentar</button>' +
+											'<input type="text" class="form-control input_comentario" id="postagem_'+resposta[i]._id+'" placeholder="Deixe um comentario...">' +
+											'<button class="btn btn-default btn_postagem" value="'+resposta[i]._id+'" type="button">Comentar</button>' +
 									'</div>'
  
 								);
 							}
+
+							$('.btn_postagem').click(function(){
+								let id = this.value;
+								let input_comentario = 'postagem_' + id;
+								let comentario = $('#'+input_comentario).val();
+
+								alert(comentario)
+							});
 						}
 					}
 
