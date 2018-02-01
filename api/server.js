@@ -131,23 +131,24 @@ app.get('/api/:id', (req, res) => {
 
 //PUT - atualizar API
 app.put('/api/:id', (req, res) => {
-    db.open((err, mongoClient) => {
-        mongoClient.collection('postagens', (err, collection) => {
-            collection.update(
-                { _id : objectId(req.params.id) },
-                { $set : { name: req.body.name } },
-                {},
-                (err, results) => {
-                    if(err) {
-                        res.json(err);
-                    } else {
-                        res.json(results);
-                    }
-                    mongoClient.close();    
-                }
-            );
-        });
-    });
+    res.send('para atualizar ');
+    // db.open((err, mongoClient) => {
+    //     mongoClient.collection('postagens', (err, collection) => {
+    //         collection.update(
+    //             { _id : objectId(req.params.id) },
+    //             { $set : { name: req.body.name } },
+    //             {},
+    //             (err, results) => {
+    //                 if(err) {
+    //                     res.json(err);
+    //                 } else {
+    //                     res.json(results);
+    //                 }
+    //                 mongoClient.close();    
+    //             }
+    //         );
+    //     });
+    // });
 });
 
 //delete - remover do BD API
